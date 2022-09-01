@@ -1,3 +1,3 @@
-module github.com/FacuGBrb/go-seed
+module github.com/redbeestudios/go-seed
 
 go 1.19
