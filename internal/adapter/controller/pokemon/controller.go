@@ -1,9 +1,9 @@
 package pokemon
 
 import (
-	"strconv"
-
+	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/redbeestudios/go-seed/pkg"
 )
@@ -13,6 +13,11 @@ type PokemonController struct {
 
 func NewPokemonController() *PokemonController {
 	return &PokemonController{}
+}
+
+type Pokemon struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 func (c *PokemonController) GetPokemon(
@@ -36,6 +41,13 @@ func (c *PokemonController) GetPokemon(
 		http.Error(response, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	pokemonModel := Pokemon{}
 	pokemon := pokemons[id]
-	response.Write([]byte(pokemon))
+
+	pokemonModel.Id = id
+	pokemonModel.Name = pokemon
+	response.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(response).Encode(pokemonModel)
+
 }
