@@ -17,6 +17,11 @@ func (c *PokemonController) GetPokemon(
 	response http.ResponseWriter,
 	request *http.Request,
 ) {
-	name, err := pkg.GetStringFromPath.GetStringFromPath(r, "action", "")
+	name, err := pkg.GetStringFromPath("name", request)
+	if err != nil {
+		http.Error(response, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
+	response.Write([]byte(name))
 }
