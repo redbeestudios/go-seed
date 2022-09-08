@@ -15,6 +15,7 @@ func NewPokemonController() *PokemonController {
 	return &PokemonController{}
 }
 
+//TODO: import this struct from model
 type Pokemon struct {
 	Id   int    `json:"id"`
 	Name string `json:"name"`
