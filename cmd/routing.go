@@ -8,7 +8,7 @@ import (
 
 func InitRoutes(dependencies *Dependencies) *mux.Router {
 	r := mux.NewRouter()
-	r.HandleFunc("/pokemon", dependencies.PokemonController.GetPokemon)
+	r.HandleFunc("/pokemon/{name}", dependencies.PokemonController.GetPokemon).Methods(http.MethodGet)
 
 	http.Handle("/", r)
 
