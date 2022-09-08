@@ -1,6 +1,8 @@
 package pokemon
 
 import (
+	"strconv"
+
 	"net/http"
 
 	"github.com/redbeestudios/go-seed/pkg"
@@ -22,6 +24,18 @@ func (c *PokemonController) GetPokemon(
 		http.Error(response, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	pokemons := map[int]string{
+		1: "Pikachu",
+		2: "Charmander",
+		3: "Charizard",
+		4: "Raichu",
+	}
+	id, err := strconv.Atoi(name)
 
-	response.Write([]byte(name))
+	if err != nil {
+		http.Error(response, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	pokemon := pokemons[id]
+	response.Write([]byte(pokemon))
 }

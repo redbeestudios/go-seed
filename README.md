@@ -1,4 +1,4 @@
-# redbee Golang Seed
+# redbee Golang seed
 
 Just another redbee seed to make things easier.
 
