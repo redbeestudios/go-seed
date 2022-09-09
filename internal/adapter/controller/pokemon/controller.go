@@ -2,6 +2,7 @@ package pokemon
 
 import (
 	"encoding/json"
+	modelPokemon "github.com/redbeestudios/go-seed/internal/application/model/pokemon"
 	"net/http"
 	"strconv"
 
@@ -19,6 +20,7 @@ func NewPokemonController() *PokemonController {
 type Pokemon struct {
 	Id   int    `json:"id"`
 	Name string `json:"name"`
+	Type string `json:"type"`
 }
 
 func (c *PokemonController) GetPokemon(
@@ -48,6 +50,7 @@ func (c *PokemonController) GetPokemon(
 
 	pokemonModel.Id = id
 	pokemonModel.Name = pokemon
+	pokemonModel.Type = modelPokemon.GetPokemonType(modelPokemon.Fire).Name()
 	response.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(response).Encode(pokemonModel)
 
