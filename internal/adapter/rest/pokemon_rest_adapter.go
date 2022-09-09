@@ -2,42 +2,33 @@ package rest
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/redbeestudios/go-seed/internal/adapter/rest/model"
-	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
 )
 
-const url = "https://pokeapi.co/api/v2/"
+const url string = "https://pokeapi.co/api/v2/"
 
 func GetPokemonById(id int) (*model.Pokemon, error) {
-
-	client := &http.Client{}
-	req, err := http.NewRequest("GET", url+"pokemon"+strconv.Itoa(id), nil)
+	resp, err := http.Get(url + "pokemon/" + strconv.Itoa(id))
 
 	if err != nil {
-		log.Println("No existe")
+		fmt.Print(err.Error())
 	}
-	req.Header.Add("Accept", "application/json")
-	req.Header.Add("Content-Type", "application/json")
+	defer resp.Body.Close()
 
-	resp, err := client.Do(req)
-
-	bodyBytes, err := io.ReadAll(resp.Body)
-
-	if err != nil {
-		log.Println("No existe")
-	}
+	response, err := ioutil.ReadAll(resp.Body)
 
 	var pokemon model.Pokemon
-	err = json.Unmarshal(bodyBytes, &pokemon)
-
+	err = json.Unmarshal(response, &pokemon)
 	if err != nil {
-		log.Println("No existe")
+		return nil, err
 	}
 
-	defer resp.Body.Close()
+	log.Println(pokemon)
 
 	return &pokemon, nil
 }
