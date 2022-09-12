@@ -8,15 +8,15 @@ import (
 type Env string
 
 const (
-	Local   Env = "LOCAL"
-	Staging Env = "STAGING"
-	Live    Env = "LIVE"
+	LocalEnvironment   Env = "LOCAL"
+	StagingEnvironment Env = "STAGING"
+	LiveEnvironment    Env = "LIVE"
 )
 
 var allowedEnv = map[string]Env{
-	Local.String():   Local,
-	Staging.String(): Staging,
-	Live.String():    Live,
+	LocalEnvironment.String():   LocalEnvironment,
+	StagingEnvironment.String(): StagingEnvironment,
+	LiveEnvironment.String():    LiveEnvironment,
 }
 
 func NewEnv(str string) (Env, error) {
