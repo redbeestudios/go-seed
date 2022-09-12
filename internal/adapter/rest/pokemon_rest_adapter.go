@@ -2,7 +2,7 @@ package rest
 
 import (
 	"encoding/json"
-	"github.com/redbeestudios/go-seed/internal/adapter/rest/model"
+	"github.com/redbeestudios/go-seed/internal/application/model/pokemon"
 	"io"
 	"log"
 	"net/http"
@@ -11,7 +11,9 @@ import (
 
 const url = "https://pokeapi.co/api/v2/"
 
-func GetPokemonById(id int) (*model.Pokemon, error) {
+type PokemonRestRepository struct{}
+
+func (p PokemonRestRepository) GetPokemonById(id int) (*pokemon.Pokemon, error) {
 
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url+"pokemon"+strconv.Itoa(id), nil)
@@ -30,7 +32,7 @@ func GetPokemonById(id int) (*model.Pokemon, error) {
 		log.Println("No existe")
 	}
 
-	var pokemon model.Pokemon
+	var pokemon pokemon.Pokemon
 	err = json.Unmarshal(bodyBytes, &pokemon)
 
 	if err != nil {
