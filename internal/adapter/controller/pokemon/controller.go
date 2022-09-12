@@ -2,22 +2,23 @@ package pokemon
 
 import (
 	"encoding/json"
-	modelPokemon "github.com/redbeestudios/go-seed/internal/application/model/pokemon"
 	"net/http"
-	"strconv"
 
+	"github.com/redbeestudios/go-seed/internal/application/port/in"
 	"github.com/redbeestudios/go-seed/pkg"
 )
 
 type PokemonController struct {
+	getPokemonByName in.GetPokemonByName
 }
 
-func NewPokemonController() *PokemonController {
-	return &PokemonController{}
+func NewPokemonController(getPokemonByName in.GetPokemonByName) *PokemonController {
+	return &PokemonController{
+		getPokemonByName: getPokemonByName,
+	}
 }
 
-//TODO: import this struct from model
-type Pokemon struct {
+type pokemonResponse struct {
 	Id   int    `json:"id"`
 	Name string `json:"name"`
 	Type string `json:"type"`
@@ -32,26 +33,26 @@ func (c *PokemonController) GetPokemon(
 		http.Error(response, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	pokemons := map[int]string{
-		1: "Pikachu",
-		2: "Charmander",
-		3: "Charizard",
-		4: "Raichu",
-	}
-	id, err := strconv.Atoi(name)
+
+	pokemon, err := c.getPokemonByName.Get(name)
 
 	if err != nil {
 		http.Error(response, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	pokemonModel := Pokemon{}
-	pokemon := pokemons[id]
+	if pokemon == nil {
+		http.Error(response, err.Error(), http.StatusNotFound)
+		return
+	}
 
-	pokemonModel.Id = id
-	pokemonModel.Name = pokemon
-	pokemonModel.Type = modelPokemon.GetPokemonType(modelPokemon.Fire).Name()
+	pokemonResponse := pokemonResponse{
+		Id:   pokemon.Id(),
+		Name: pokemon.Name(),
+		Type: pokemon.PokemonType(),
+	}
+
 	response.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(response).Encode(pokemonModel)
+	json.NewEncoder(response).Encode(pokemonResponse)
 
 }
