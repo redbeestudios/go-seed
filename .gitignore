@@ -1,0 +1,5 @@
+# IDE 
+.vscode
+
+# Go auto-generated files
+golangci-report.out
