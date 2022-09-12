@@ -3,21 +3,15 @@ package rest
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"log"
-	"net/http"
+	"time"
 
+	"github.com/go-resty/resty/v2"
 	"github.com/redbeestudios/go-seed/internal/application/model/pokemon"
 	"github.com/redbeestudios/go-seed/internal/application/port/out"
+	"github.com/redbeestudios/go-seed/pkg"
 )
 
-func NewPokemonRestAdapter() *pokemonRestAdapter {
-	return &pokemonRestAdapter{}
-}
-
 var _ out.PokemonRepository = (*pokemonRestAdapter)(nil)
-
-type pokemonRestAdapter struct{}
 
 type typeDescription struct {
 	Name string `json:"name"`
@@ -34,31 +28,47 @@ type pokemonResponse struct {
 	Types []responseType `json:"types"`
 }
 
-func (c *pokemonRestAdapter) GetByName(name string) (*pokemon.Pokemon, error) {
-	response, err := http.Get(fmt.Sprintf("http://pokeapi.co/api/v2/pokemon/%s", name))
+type pokemonRestAdapter struct {
+	client *resty.Client
+}
+
+func NewPokemonRestAdapter(
+	config pkg.RestClientConfig,
+) *pokemonRestAdapter {
+
+	client := resty.New().
+		SetBaseURL(config.BaseUrl).
+		SetTimeout(time.Duration(config.TimeoutMilliseconds) * time.Millisecond).
+		SetRetryCount(config.RetryCount).
+		SetRetryWaitTime(time.Duration(config.RetryWaitMilliseconds) * time.Millisecond)
+
+	return &pokemonRestAdapter{
+		client: client,
+	}
+}
+
+func (a *pokemonRestAdapter) GetByName(name string) (*pokemon.Pokemon, error) {
+	response, err := a.client.
+		NewRequest().
+		SetPathParam("name", name).
+		Get("/pokemon/{name}")
 
 	if err != nil {
 		return nil, err
 	}
 
-	if response.StatusCode != 200 {
+	if response.StatusCode() != 200 {
 		return nil, fmt.Errorf("pokemon not found")
 	}
 
 	var responseObject *pokemonResponse
-	responseData, err := ioutil.ReadAll(response.Body)
-
-	if err != nil {
-		log.Fatal(err)
+	if err := json.Unmarshal(response.Body(), &responseObject); err != nil {
+		return nil, fmt.Errorf("Error reading PokeAPI response")
 	}
 
-	json.Unmarshal(responseData, &responseObject)
-
-	pokemon := pokemon.NewPokemon(
+	return pokemon.NewPokemon(
 		responseObject.Id,
 		responseObject.Name,
 		responseObject.Types[0].Type.Name,
-	)
-
-	return pokemon, nil
+	), nil
 }

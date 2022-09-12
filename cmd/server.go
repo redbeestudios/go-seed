@@ -10,13 +10,13 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func StartServer(r *mux.Router) {
+func StartServer(config *Config, router *mux.Router) {
 	srv := &http.Server{
-		Addr:         "0.0.0.0:8080",
-		WriteTimeout: time.Second * 15,
-		ReadTimeout:  time.Second * 15,
-		IdleTimeout:  time.Second * 60,
-		Handler:      r,
+		Addr:         config.Server.Address,
+		WriteTimeout: time.Duration(config.Server.WriteTimeout) * time.Second,
+		ReadTimeout:  time.Duration(config.Server.ReadTimeout) * time.Second,
+		IdleTimeout:  time.Duration(config.Server.IdleTimeout) * time.Second,
+		Handler:      router,
 	}
 
 	go func() {
@@ -25,8 +25,8 @@ func StartServer(r *mux.Router) {
 		}
 	}()
 
-	// Wait for terminate signal to shut down server
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt)
-	<-c
+	// Wait for signal to shut down server
+	shutDownChannel := make(chan os.Signal, 1)
+	signal.Notify(shutDownChannel, os.Interrupt)
+	<-shutDownChannel
 }

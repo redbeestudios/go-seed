@@ -1,10 +1,21 @@
 package main
 
-import "github.com/redbeestudios/go-seed/cmd"
+import (
+	"fmt"
+
+	"github.com/redbeestudios/go-seed/cmd"
+	"github.com/redbeestudios/go-seed/pkg"
+)
 
 func main() {
-	deps := cmd.InitDependencies()
+	env, err := pkg.NewEnv("local")
+	if err != nil {
+		panic(fmt.Sprintf("error creating environment: %s", err.Error()))
+	}
+
+	config := cmd.InitConfig(env)
+	deps := cmd.InitDependencies(config)
 	router := cmd.InitRoutes(deps)
 
-	cmd.StartServer(router)
+	cmd.StartServer(config, router)
 }
