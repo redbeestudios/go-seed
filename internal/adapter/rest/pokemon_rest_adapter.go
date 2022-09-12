@@ -3,7 +3,7 @@ package rest
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/redbeestudios/go-seed/internal/application/model/pokemon"
+	"github.com/redbeestudios/go-seed/internal/application/domain/pokemon"
 	"io"
 	"log"
 	"net/http"
@@ -14,7 +14,7 @@ const url string = "https://pokeapi.co/api/v2/"
 
 type PokemonRestAdapter struct{}
 
-func (p *PokemonRestAdapter) GetPokemonById(id int) (*pokemon.Pokemon, error) {
+func (p *PokemonRestAdapter) GetById(id int) (*pokemon.Pokemon, error) {
 	resp, err := http.Get(url + "pokemon/" + strconv.Itoa(id))
 
 	if err != nil {

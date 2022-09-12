@@ -1,9 +1,9 @@
 package in
 
 import (
-	"github.com/redbeestudios/go-seed/internal/application/model/pokemon"
+	"github.com/redbeestudios/go-seed/internal/application/domain/pokemon"
 )
 
-type GetByNameInputPort interface {
-	execute(id int) (*pokemon.Pokemon, error)
+type GetByIdInputPort interface {
+	Execute(id int) (*pokemon.Pokemon, error)
 }
