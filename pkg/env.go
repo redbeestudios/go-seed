@@ -1,6 +1,9 @@
 package pkg
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type Env string
 
@@ -17,14 +20,14 @@ var allowedEnv = map[string]Env{
 }
 
 func NewEnv(str string) (Env, error) {
-	if env, ok := allowedEnv[str]; ok {
+	if env, ok := allowedEnv[strings.ToUpper(str)]; ok {
 		return env, nil
-	} else {
-		return "", fmt.Errorf(
-			"%s is not a valid environment value",
-			str,
-		)
 	}
+
+	return "", fmt.Errorf(
+		"%s is not a valid environment value",
+		str,
+	)
 }
 
 func (e Env) String() string {
