@@ -11,27 +11,30 @@ import (
 	"github.com/redbeestudios/go-seed/internal/application/port/out"
 )
 
-var _ out.PokemonRepository = (*PokemonRestAdapter)(nil)
+func NewPokemonRestAdapter() *pokemonRestAdapter {
+	return &pokemonRestAdapter{}
+}
 
-type PokemonRestAdapter struct{}
+var _ out.PokemonRepository = (*pokemonRestAdapter)(nil)
 
-type TypeDescription struct {
+type pokemonRestAdapter struct{}
+
+type typeDescription struct {
 	Name string `json:"name"`
 }
 
-type ResponseType struct {
+type responseType struct {
 	Slot string          `json:"slot"`
-	Type TypeDescription `json:"type"`
+	Type typeDescription `json:"type"`
 }
 
-type PokemonResponse struct {
+type pokemonResponse struct {
 	Id    int            `json:"id"`
 	Name  string         `json:"name"`
-	Types []ResponseType `json:"types"`
+	Types []responseType `json:"types"`
 }
 
-func (c *PokemonRestAdapter) GetByName(name string) (*pokemon.Pokemon, error) {
-	//var pokemonResponse PokemonResponse
+func (c *pokemonRestAdapter) GetByName(name string) (*pokemon.Pokemon, error) {
 	response, err := http.Get(fmt.Sprintf("http://pokeapi.co/api/v2/pokemon/%s", name))
 
 	if err != nil {
@@ -42,7 +45,7 @@ func (c *PokemonRestAdapter) GetByName(name string) (*pokemon.Pokemon, error) {
 		return nil, fmt.Errorf("pokemon not found")
 	}
 
-	var responseObject *PokemonResponse
+	var responseObject *pokemonResponse
 	responseData, err := ioutil.ReadAll(response.Body)
 
 	if err != nil {

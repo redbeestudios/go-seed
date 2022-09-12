@@ -12,9 +12,9 @@ type Dependencies struct {
 
 func InitDependencies() *Dependencies {
 
-	pokemonRepository := rest.PokemonRestAdapter{}
-	pokemonUseCase := useCase.GetByName{PokemonRepository: &pokemonRepository}
-	pokemonController := pokemonController.NewPokemonController(&pokemonUseCase)
+	pokemonRepository := rest.NewPokemonRestAdapter()
+	pokemonUseCase := useCase.NewGetByName(pokemonRepository)
+	pokemonController := pokemonController.NewPokemonController(pokemonUseCase)
 
 	return &Dependencies{
 		PokemonController: pokemonController,
