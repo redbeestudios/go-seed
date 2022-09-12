@@ -12,7 +12,9 @@ import (
 
 const url string = "https://pokeapi.co/api/v2/"
 
-func GetPokemonById(id int) (*pokemon.Pokemon, error) {
+type PokemonRestAdapter struct{}
+
+func (p *PokemonRestAdapter) GetPokemonById(id int) (*pokemon.Pokemon, error) {
 	resp, err := http.Get(url + "pokemon/" + strconv.Itoa(id))
 
 	if err != nil {

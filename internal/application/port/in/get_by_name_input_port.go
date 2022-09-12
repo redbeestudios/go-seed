@@ -5,5 +5,5 @@ import (
 )
 
 type GetByNameInputPort interface {
-	execute(id int) (pokemon.Pokemon, error)
+	execute(id int) (*pokemon.Pokemon, error)
 }
