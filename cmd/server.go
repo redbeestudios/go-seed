@@ -10,12 +10,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func StartServer(r *mux.Router) {
+func StartServer(config *Config, r *mux.Router) {
 	srv := &http.Server{
-		Addr:         "0.0.0.0:8080",
-		WriteTimeout: time.Second * 15,
-		ReadTimeout:  time.Second * 15,
-		IdleTimeout:  time.Second * 60,
+		Addr:         config.Server.Address,
+		WriteTimeout: time.Duration(config.Server.WriteTimeout) * time.Second * 15,
+		ReadTimeout:  time.Duration(config.Server.ReadTimeout) * time.Second * 15,
+		IdleTimeout:  time.Duration(config.Server.IdleTimeout) * time.Second * 60,
 		Handler:      r,
 	}
 
