@@ -6,8 +6,10 @@
         "write_timeout": 15,
         "idle_timeout": 60
     },
-    "redis": {
-        "address": "0.0.0.0",
-        "port": 6379
+    "poke_api": {
+        "base_url": "http://pokeapi.co/api/v2",
+        "timeout_milliseconds": 1000,
+        "retry_count": 3,
+        "retry_wait_time_milliseconds": 1000
     }
 }
