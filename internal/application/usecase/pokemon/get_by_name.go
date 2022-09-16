@@ -1,6 +1,8 @@
 package pokemon
 
 import (
+	"context"
+
 	"github.com/redbeestudios/go-seed/internal/application/model/pokemon"
 	"github.com/redbeestudios/go-seed/internal/application/port/in"
 	"github.com/redbeestudios/go-seed/internal/application/port/out"
@@ -18,6 +20,6 @@ func NewGetByName(pokemonRepository out.PokemonRepository) *getByName {
 	}
 }
 
-func (c *getByName) Get(name string) (*pokemon.Pokemon, error) {
-	return c.pokemonRepository.GetByName(name)
+func (c *getByName) Get(ctx context.Context, name string) (*pokemon.Pokemon, error) {
+	return c.pokemonRepository.GetByName(ctx, name)
 }

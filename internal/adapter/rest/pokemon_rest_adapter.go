@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"time"
@@ -47,7 +48,10 @@ func NewPokemonRestAdapter(
 	}
 }
 
-func (a *pokemonRestAdapter) GetByName(name string) (*pokemon.Pokemon, error) {
+func (a *pokemonRestAdapter) GetByName(
+	ctx context.Context,
+	name string,
+) (*pokemon.Pokemon, error) {
 	response, err := a.client.
 		NewRequest().
 		SetPathParam("name", name).

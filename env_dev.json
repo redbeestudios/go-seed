@@ -1,7 +1,6 @@
 {
     "server": {
-        "address": "0.0.0.0",
-        "port": 8080,
+        "address": "localhost:8080",
         "read_timeout": 15,
         "write_timeout": 15,
         "idle_timeout": 60
@@ -11,5 +10,8 @@
         "timeout_milliseconds": 1000,
         "retry_count": 3,
         "retry_wait_time_milliseconds": 1000
+    },
+    "redis": {
+        "address": "localhost:6379"
     }
 }
