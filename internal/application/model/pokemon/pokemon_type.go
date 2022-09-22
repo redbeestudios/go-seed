@@ -1,27 +1,28 @@
 package pokemon
 
+import "fmt"
+
+type Type string
+
 const (
-	Fire Type = iota
-	Grass
-	Water
+	Fire  Type = "Fire"
+	Grass Type = "Grass"
+	Water Type = "Water"
 )
 
-type Type int
-
-type PokemonType struct {
-	name string
+var allowedTypes = map[string]Type{
+	Fire.String():  Fire,
+	Grass.String(): Grass,
+	Water.String(): Water,
 }
 
-func (t *PokemonType) Name() string {
-	return t.name
+func NewPokemonType(pokemonType string) (Type, error) {
+	if t, ok := allowedTypes[pokemonType]; ok {
+		return t, nil
+	}
+	return "", fmt.Errorf("Invalid pokemon type: %s", pokemonType)
 }
 
-var typeMap = map[Type]*PokemonType{
-	Fire:  {name: "Fire"},
-	Grass: {name: "Grass"},
-	Water: {name: "Water"},
-}
-
-func GetPokemonType(pokemonType Type) *PokemonType {
-	return typeMap[pokemonType]
+func (t Type) String() string {
+	return string(t)
 }
