@@ -60,5 +60,7 @@ func (a *cachedPokemonRestAdapter) GetByName(
 		return nil, err
 	}
 
+	a.cache.Set(ctx, POKEMON_BY_NAME_KEY, res.Name(), 0)
+
 	return res, nil
 }

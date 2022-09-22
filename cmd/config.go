@@ -19,7 +19,7 @@ func InitConfig(env pkg.Env) *Config {
 
 	// TODO: este codigo podria moverse a pkg bajo el nombre de ReadJsonFile,
 	// para en el futuro formar parte de una lib de Redbee
-	jsonConfig, err := os.Open(fmt.Sprintf("%s_dev.json", env.String()))
+	jsonConfig, err := os.Open(fmt.Sprintf("env_%s.json", env.String()))
 	if err != nil {
 		panic(fmt.Sprintf("Error reading config file: %s", err.Error()))
 	}

@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	env, err := pkg.NewEnv("local")
+	env, err := pkg.NewEnv("dev")
 	if err != nil {
 		panic(fmt.Sprintf("error creating environment: %s", err.Error()))
 	}
