@@ -13,21 +13,6 @@ import (
 
 var _ out.PokemonRepository = (*pokemonRestAdapter)(nil)
 
-type typeDescription struct {
-	Name string `json:"name"`
-}
-
-type responseType struct {
-	Slot string          `json:"slot"`
-	Type typeDescription `json:"type"`
-}
-
-type pokemonResponse struct {
-	Id    int            `json:"id"`
-	Name  string         `json:"name"`
-	Types []responseType `json:"types"`
-}
-
 type pokemonRestAdapter struct {
 	client *resty.Client
 }
@@ -66,9 +51,5 @@ func (a *pokemonRestAdapter) GetByName(name string) (*pokemon.Pokemon, error) {
 		return nil, fmt.Errorf("Error reading PokeAPI response")
 	}
 
-	return pokemon.NewPokemon(
-		responseObject.Id,
-		responseObject.Name,
-		responseObject.Types[0].Type.Name,
-	), nil
+	return responseObject.ToDomain()
 }

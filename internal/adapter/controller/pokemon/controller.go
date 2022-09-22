@@ -18,12 +18,6 @@ func NewPokemonController(getPokemonByName in.GetPokemonByName) *PokemonControll
 	}
 }
 
-type pokemonResponse struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
-	Type string `json:"type"`
-}
-
 func (c *PokemonController) GetPokemon(
 	response http.ResponseWriter,
 	request *http.Request,
@@ -46,13 +40,7 @@ func (c *PokemonController) GetPokemon(
 		return
 	}
 
-	pokemonResponse := pokemonResponse{
-		Id:   pokemon.Id(),
-		Name: pokemon.Name(),
-		Type: pokemon.PokemonType(),
-	}
-
 	response.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(response).Encode(pokemonResponse)
+	json.NewEncoder(response).Encode(fromDomain(pokemon))
 
 }
