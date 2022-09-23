@@ -44,7 +44,7 @@ func TestGetPokemon(t *testing.T) {
 
 	tests := []test{
 		{
-			name: "prueba",
+			name: "Get pokemon by name",
 			mock: func(dependencies *controllerDependencies) {
 				dependencies.getByName.EXPECT().
 					Get(gomock.Any(), pokemon.Name()).
@@ -59,6 +59,24 @@ func TestGetPokemon(t *testing.T) {
 			`,
 			expectedCode: 200,
 		},
+		{
+			name: "500 if service fails to return pokemon",
+			mock: func(dependencies *controllerDependencies) {
+				dependencies.getByName.EXPECT().
+					Get(gomock.Any(), pokemon.Name()).
+					Return(nil, fmt.Errorf("Internal server error"))
+			},
+			expectedCode: 500,
+		},
+		//{
+		//	name: "404 if no pokemon is exists with name",
+		//	mock: func(dependencies *controllerDependencies) {
+		//		dependencies.getByName.EXPECT().
+		//			Get(gomock.Any(), pokemon.Name()).
+		//			Return(nil, nil)
+		//	},
+		//	expectedCode: 404,
+		//},
 	}
 
 	for _, test := range tests {
