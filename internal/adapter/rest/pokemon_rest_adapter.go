@@ -14,21 +14,6 @@ import (
 
 var _ out.PokemonRepository = (*pokemonRestAdapter)(nil)
 
-type typeDescription struct {
-	Name string `json:"name"`
-}
-
-type pokemonResponse struct {
-	Id    int            `json:"id"`
-	Name  string         `json:"name"`
-	Types []responseType `json:"types"`
-}
-
-type responseType struct {
-	Slot int             `json:"slot"`
-	Type typeDescription `json:"type"`
-}
-
 type pokemonRestAdapter struct {
 	client *resty.Client
 }
@@ -70,9 +55,5 @@ func (a *pokemonRestAdapter) GetByName(
 		return nil, err
 	}
 
-	return pokemon.NewPokemon(
-		responseObject.Id,
-		responseObject.Name,
-		responseObject.Types[0].Type.Name,
-	), nil
+	return responseObject.ToDomain()
 }

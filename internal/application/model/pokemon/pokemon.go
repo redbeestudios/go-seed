@@ -3,14 +3,14 @@ package pokemon
 type Pokemon struct {
 	id          int
 	name        string
-	pokemonType string
+	pokemonType Type
 }
 
-func NewPokemon(id int, name string, pokemonType string) *Pokemon {
+func NewPokemon(id int, name string, pokemonType Type) *Pokemon {
 	return &Pokemon{id: id, name: name, pokemonType: pokemonType}
 }
 
-func (p *Pokemon) PokemonType() string {
+func (p *Pokemon) Type() Type {
 	return p.pokemonType
 }
 
