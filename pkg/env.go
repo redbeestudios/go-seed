@@ -8,9 +8,9 @@ import (
 type Env string
 
 const (
-	LocalEnvironment   Env = "LOCAL"
-	StagingEnvironment Env = "STAGING"
-	LiveEnvironment    Env = "LIVE"
+	LocalEnvironment   Env = "dev"
+	StagingEnvironment Env = "stg"
+	LiveEnvironment    Env = "live"
 )
 
 var allowedEnv = map[string]Env{
@@ -20,7 +20,7 @@ var allowedEnv = map[string]Env{
 }
 
 func NewEnv(str string) (Env, error) {
-	if env, ok := allowedEnv[strings.ToUpper(str)]; ok {
+	if env, ok := allowedEnv[strings.ToLower(str)]; ok {
 		return env, nil
 	}
 

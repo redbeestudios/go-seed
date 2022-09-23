@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"time"
@@ -17,15 +18,15 @@ type typeDescription struct {
 	Name string `json:"name"`
 }
 
-type responseType struct {
-	Slot string          `json:"slot"`
-	Type typeDescription `json:"type"`
-}
-
 type pokemonResponse struct {
 	Id    int            `json:"id"`
 	Name  string         `json:"name"`
 	Types []responseType `json:"types"`
+}
+
+type responseType struct {
+	Slot int             `json:"slot"`
+	Type typeDescription `json:"type"`
 }
 
 type pokemonRestAdapter struct {
@@ -47,9 +48,12 @@ func NewPokemonRestAdapter(
 	}
 }
 
-func (a *pokemonRestAdapter) GetByName(name string) (*pokemon.Pokemon, error) {
+func (a *pokemonRestAdapter) GetByName(
+	ctx context.Context,
+	name string,
+) (*pokemon.Pokemon, error) {
 	response, err := a.client.
-		NewRequest().
+		R().
 		SetPathParam("name", name).
 		Get("/pokemon/{name}")
 
@@ -61,9 +65,9 @@ func (a *pokemonRestAdapter) GetByName(name string) (*pokemon.Pokemon, error) {
 		return nil, fmt.Errorf("pokemon not found")
 	}
 
-	var responseObject *pokemonResponse
-	if err := json.Unmarshal(response.Body(), &responseObject); err != nil {
-		return nil, fmt.Errorf("Error reading PokeAPI response")
+	var responseObject *pokemonResponse = &pokemonResponse{}
+	if err := json.Unmarshal(response.Body(), responseObject); err != nil {
+		return nil, err
 	}
 
 	return pokemon.NewPokemon(
