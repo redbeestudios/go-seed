@@ -9,10 +9,10 @@ import (
 )
 
 type PokemonController struct {
-	getPokemonByName in.GetPokemonByName
+	getPokemonByName in.GetByName
 }
 
-func NewPokemonController(getPokemonByName in.GetPokemonByName) *PokemonController {
+func NewPokemonController(getPokemonByName in.GetByName) *PokemonController {
 	return &PokemonController{
 		getPokemonByName: getPokemonByName,
 	}
@@ -43,7 +43,12 @@ func (c *PokemonController) GetPokemon(
 		return
 	}
 
-	response.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(response).Encode(fromDomain(pokemon))
+	js, err := json.Marshal(fromDomain(pokemon))
+	if err != nil {
+		http.Error(response, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
+	response.Header().Set("Content-Type", "application/json")
+	response.Write(js)
 }

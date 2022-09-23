@@ -9,9 +9,9 @@ import (
 func TestNewEnv(t *testing.T) {
 
 	t.Run("NewEnv returns object if environment is valid", func(t *testing.T) {
-		env, err := NewEnv("local")
+		env, err := NewEnv("dev")
 		assert.NoError(t, err)
-		assert.Equal(t, LocalEnvironment.String(), env)
+		assert.Equal(t, LocalEnvironment, env)
 	})
 
 	t.Run("NewEnv returns error if environment is not valid", func(t *testing.T) {
