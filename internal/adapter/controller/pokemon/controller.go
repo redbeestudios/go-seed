@@ -22,19 +22,22 @@ func (c *PokemonController) GetPokemon(
 	response http.ResponseWriter,
 	request *http.Request,
 ) {
+	ctx := request.Context()
+
 	name, err := pkg.GetStringFromPath("name", request)
 	if err != nil {
 		http.Error(response, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	pokemon, err := c.getPokemonByName.Get(name)
-
+	pokemon, err := c.getPokemonByName.Get(ctx, name)
 	if err != nil {
 		http.Error(response, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
+	// TODO: Creo que esta rara esta validacion, si el pokemon es nulo deberiamos
+	// haber propagado un error antes
 	if pokemon == nil {
 		http.Error(response, err.Error(), http.StatusNotFound)
 		return

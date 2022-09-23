@@ -6,16 +6,12 @@ type Pokemon struct {
 	pokemonType Type
 }
 
-func NewPokemon(
-	id int,
-	name string,
-	pokemonType Type,
-) *Pokemon {
-	return &Pokemon{
-		id:          id,
-		name:        name,
-		pokemonType: pokemonType,
-	}
+func NewPokemon(id int, name string, pokemonType Type) *Pokemon {
+	return &Pokemon{id: id, name: name, pokemonType: pokemonType}
+}
+
+func (p *Pokemon) Type() Type {
+	return p.pokemonType
 }
 
 func (p *Pokemon) Id() int {
@@ -24,8 +20,4 @@ func (p *Pokemon) Id() int {
 
 func (p *Pokemon) Name() string {
 	return p.name
-}
-
-func (p *Pokemon) Type() Type {
-	return p.pokemonType
 }

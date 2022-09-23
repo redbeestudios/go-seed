@@ -5,9 +5,9 @@ import "fmt"
 type Type string
 
 const (
-	Fire  Type = "Fire"
-	Grass Type = "Grass"
-	Water Type = "Water"
+	Fire  Type = "fire"
+	Grass Type = "grass"
+	Water Type = "water"
 )
 
 var allowedTypes = map[string]Type{

@@ -7,7 +7,7 @@ type typeDescription struct {
 }
 
 type responseType struct {
-	Slot string          `json:"slot"`
+	Slot int             `json:"slot"`
 	Type typeDescription `json:"type"`
 }
 

@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"time"
@@ -32,9 +33,12 @@ func NewPokemonRestAdapter(
 	}
 }
 
-func (a *pokemonRestAdapter) GetByName(name string) (*pokemon.Pokemon, error) {
+func (a *pokemonRestAdapter) GetByName(
+	ctx context.Context,
+	name string,
+) (*pokemon.Pokemon, error) {
 	response, err := a.client.
-		NewRequest().
+		R().
 		SetPathParam("name", name).
 		Get("/pokemon/{name}")
 
@@ -46,9 +50,9 @@ func (a *pokemonRestAdapter) GetByName(name string) (*pokemon.Pokemon, error) {
 		return nil, fmt.Errorf("pokemon not found")
 	}
 
-	var responseObject *pokemonResponse
-	if err := json.Unmarshal(response.Body(), &responseObject); err != nil {
-		return nil, fmt.Errorf("Error reading PokeAPI response")
+	var responseObject *pokemonResponse = &pokemonResponse{}
+	if err := json.Unmarshal(response.Body(), responseObject); err != nil {
+		return nil, err
 	}
 
 	return responseObject.ToDomain()
