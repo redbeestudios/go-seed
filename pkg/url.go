@@ -1,7 +1,6 @@
 package pkg
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -27,7 +26,7 @@ func GetStringFromPath(
 	str := mux.Vars(r)[key]
 
 	if len(str) < 1 {
-		return "", errors.New(fmt.Sprintf("No key %s found in path", key))
+		return "", fmt.Errorf("No key %s found in path", key)
 	}
 
 	return str, nil
