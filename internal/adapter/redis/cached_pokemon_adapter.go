@@ -40,10 +40,10 @@ func (a *cachedPokemonRestAdapter) GetByName(
 	ctx context.Context,
 	name string,
 ) (*pokemon.Pokemon, error) {
-	var res *pokemon.Pokemon
+	var dto *pokemonDTO
 
-	if cachedRes, err := a.cache.Get(ctx, name).Result(); err != redis.Nil {
-		if err := json.Unmarshal([]byte(cachedRes), &res); err != nil {
+	if cachedRes, err := a.cache.Get(ctx, keyForName(name)).Result(); err != redis.Nil {
+		if err := json.Unmarshal([]byte(cachedRes), &dto); err != nil {
 			return nil, fmt.Errorf(
 				"Unmarshal error for pair (%s:%s), cause: %s",
 				POKEMON_BY_NAME_KEY,
@@ -52,7 +52,7 @@ func (a *cachedPokemonRestAdapter) GetByName(
 			)
 		}
 
-		return res, nil
+		return dto.ToDomain()
 	}
 
 	res, err := a.repository.GetByName(ctx, name)
@@ -60,7 +60,13 @@ func (a *cachedPokemonRestAdapter) GetByName(
 		return nil, err
 	}
 
-	a.cache.Set(ctx, POKEMON_BY_NAME_KEY, res.Name(), 0)
+	dto = fromDomain(res)
+
+	a.cache.Set(ctx, keyForName(name), dto, 0)
 
 	return res, nil
+}
+
+func keyForName(name string) string {
+	return POKEMON_BY_NAME_KEY + ":" + name
 }

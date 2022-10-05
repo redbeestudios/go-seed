@@ -8,7 +8,7 @@ import (
 	"github.com/redbeestudios/go-seed/internal/application/port/out"
 )
 
-var _ in.GetPokemonByName = (*getByName)(nil)
+var _ in.GetByName = (*getByName)(nil)
 
 type getByName struct {
 	pokemonRepository out.PokemonRepository

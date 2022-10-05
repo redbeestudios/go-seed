@@ -26,3 +26,12 @@ func NewPokemonType(pokemonType string) (Type, error) {
 func (t Type) String() string {
 	return string(t)
 }
+
+// Testing purpose functions/methods
+func MustBuildPokemonType(pokemonType string) Type {
+	p, err := NewPokemonType(pokemonType)
+	if err != nil {
+		panic(err)
+	}
+	return p
+}
