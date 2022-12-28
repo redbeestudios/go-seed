@@ -9,15 +9,16 @@ type pokemonDTO struct {
 }
 
 func (p *pokemonDTO) ToDomain() (*pokemon.Pokemon, error) {
-	pokemonType, err := pokemon.NewPokemonType(p.Type)
-	if err != nil {
-		return nil, err
-	}
+	//pokemonType, err := pokemon.NewPokemonType(p.Type)
+	//if err != nil {
+	//	return nil, err
+	//}
 
 	return pokemon.NewPokemon(
 		p.Id,
 		p.Name,
-		pokemonType,
+		"water",
+		"fire",
 	), nil
 }
 

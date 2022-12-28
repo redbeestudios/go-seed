@@ -64,7 +64,7 @@ func TestGetByName(t *testing.T) {
 				test.mock()
 			}
 
-			adapter := pokemonRestAdapter{client: client}
+			adapter := PokemonRestAdapter{client: client}
 
 			res, err := adapter.GetByName(context.Background(), pokemon.Name())
 			if test.expectErr {

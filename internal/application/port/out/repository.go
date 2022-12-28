@@ -10,4 +10,5 @@ import (
 
 type PokemonRepository interface {
 	GetByName(ctx context.Context, name string) (*pokemon.Pokemon, error)
+	SavePokemon(ctx context.Context, pokemon *pokemon.Pokemon) error
 }

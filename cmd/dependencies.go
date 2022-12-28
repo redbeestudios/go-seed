@@ -2,8 +2,8 @@ package cmd
 
 import (
 	pokemonController "github.com/redbeestudios/go-seed/internal/adapter/controller/pokemon"
-	"github.com/redbeestudios/go-seed/internal/adapter/redis"
 	"github.com/redbeestudios/go-seed/internal/adapter/rest"
+	"github.com/redbeestudios/go-seed/internal/adapter/sql"
 	useCase "github.com/redbeestudios/go-seed/internal/application/usecase/pokemon"
 )
 
@@ -14,16 +14,21 @@ type Dependencies struct {
 func InitDependencies(config *Config) *Dependencies {
 
 	pokemonRepository := rest.NewPokemonRestAdapter(config.PokeApi)
-	cachedPokemonRepository := redis.NewCachedPokemonRestAdapter(
+	/*cachedPokemonRepository := redis.NewCachedPokemonRestAdapter(
 		config.Redis,
+		pokemonRepository,
+	)*/
+	sqlPokemonRepository := sql.NewSqlPokemonRestAdapter(
 		pokemonRepository,
 	)
 
-	pokemonUseCase := useCase.NewGetByName(cachedPokemonRepository)
+	pokemonUseCase := useCase.NewGetByName(pokemonRepository)
 
-	pokemonController := pokemonController.NewPokemonController(pokemonUseCase)
+	savePokemonUseCase := useCase.NewSavePokemon(sqlPokemonRepository)
+
+	controller := pokemonController.NewPokemonController(pokemonUseCase, savePokemonUseCase)
 
 	return &Dependencies{
-		PokemonController: pokemonController,
+		PokemonController: controller,
 	}
 }

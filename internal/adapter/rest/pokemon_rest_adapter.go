@@ -12,15 +12,20 @@ import (
 	"github.com/redbeestudios/go-seed/pkg"
 )
 
-var _ out.PokemonRepository = (*pokemonRestAdapter)(nil)
+var _ out.PokemonRepository = (*PokemonRestAdapter)(nil)
 
-type pokemonRestAdapter struct {
+type PokemonRestAdapter struct {
 	client *resty.Client
+}
+
+func (a *PokemonRestAdapter) SavePokemon(ctx context.Context, pokemon *pokemon.Pokemon) error {
+	//TODO implement me
+	panic("implement me")
 }
 
 func NewPokemonRestAdapter(
 	config pkg.RestClientConfig,
-) *pokemonRestAdapter {
+) *PokemonRestAdapter {
 
 	client := resty.New().
 		SetBaseURL(config.BaseUrl).
@@ -28,12 +33,12 @@ func NewPokemonRestAdapter(
 		SetRetryCount(config.RetryCount).
 		SetRetryWaitTime(time.Duration(config.RetryWaitMilliseconds) * time.Millisecond)
 
-	return &pokemonRestAdapter{
+	return &PokemonRestAdapter{
 		client: client,
 	}
 }
 
-func (a *pokemonRestAdapter) GetByName(
+func (a *PokemonRestAdapter) GetByName(
 	ctx context.Context,
 	name string,
 ) (*pokemon.Pokemon, error) {

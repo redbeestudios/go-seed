@@ -8,18 +8,18 @@ import (
 	"github.com/redbeestudios/go-seed/internal/application/port/out"
 )
 
-var _ in.GetByName = (*getByName)(nil)
+var _ in.GetByName = (*GetByName)(nil)
 
-type getByName struct {
+type GetByName struct {
 	pokemonRepository out.PokemonRepository
 }
 
-func NewGetByName(pokemonRepository out.PokemonRepository) *getByName {
-	return &getByName{
+func NewGetByName(pokemonRepository out.PokemonRepository) *GetByName {
+	return &GetByName{
 		pokemonRepository: pokemonRepository,
 	}
 }
 
-func (c *getByName) Get(ctx context.Context, name string) (*pokemon.Pokemon, error) {
+func (c *GetByName) Get(ctx context.Context, name string) (*pokemon.Pokemon, error) {
 	return c.pokemonRepository.GetByName(ctx, name)
 }

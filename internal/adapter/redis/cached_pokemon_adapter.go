@@ -11,32 +11,37 @@ import (
 	"github.com/redbeestudios/go-seed/pkg"
 )
 
-var _ out.PokemonRepository = (*cachedPokemonRestAdapter)(nil)
+var _ out.PokemonRepository = (*CachedPokemonRestAdapter)(nil)
 
 const POKEMON_BY_NAME_KEY = "pokemon_with_name"
 
-type cachedPokemonRestAdapter struct {
+type CachedPokemonRestAdapter struct {
 	cache      *redis.Client
 	repository out.PokemonRepository
+}
+
+func (a *CachedPokemonRestAdapter) SavePokemon(ctx context.Context, pokemon *pokemon.Pokemon) error {
+	//TODO implement me
+	panic("implement me")
 }
 
 func NewCachedPokemonRestAdapter(
 	cacheConfig pkg.RedisConfig,
 	repository out.PokemonRepository,
-) *cachedPokemonRestAdapter {
+) *CachedPokemonRestAdapter {
 	cache := redis.NewClient(&redis.Options{
 		Addr:     cacheConfig.BaseUrl,
 		Password: "",
 		DB:       0,
 	})
 
-	return &cachedPokemonRestAdapter{
+	return &CachedPokemonRestAdapter{
 		cache:      cache,
 		repository: repository,
 	}
 }
 
-func (a *cachedPokemonRestAdapter) GetByName(
+func (a *CachedPokemonRestAdapter) GetByName(
 	ctx context.Context,
 	name string,
 ) (*pokemon.Pokemon, error) {
