@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"sync"
 	"time"
 
 	"github.com/redbeestudios/go-seed/internal/application/port/in"
@@ -76,17 +77,28 @@ func (c *PokemonController) DumpPokemons(response http.ResponseWriter, request *
 func (c *PokemonController) DumpPokemonsWithGoRoutines(response http.ResponseWriter, request *http.Request) {
 	ctx := request.Context()
 
-	go func() {
-		start := time.Now()
-		for i := 1; i <= 906; i++ {
-			index := i
-			go func() {
-				c.retrieveAndSavePokemon(response, ctx, index, false)
-			}()
-		}
+	var times [906]int64
 
-		log.Printf("Execution Finalized, elapsed time: %s", time.Since(start))
-	}()
+	var totalTime int64 = 0
+
+	var wg sync.WaitGroup
+
+	start := time.Now()
+	for i := 1; i < 906; i++ {
+		index := i
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			c.retrieveAndSavePokemon(response, ctx, index, false)
+			times[index] = time.Since(start).Milliseconds()
+		}()
+	}
+
+	wg.Wait()
+	for _, eachTime := range times {
+		totalTime = totalTime + eachTime
+	}
+	log.Printf("Execution Finalized, avg time: %d milliseconds", totalTime/905)
 
 }
 
