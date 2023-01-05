@@ -24,11 +24,12 @@ type SqlPokemonRestAdapter struct {
 }
 
 func (a *SqlPokemonRestAdapter) SavePokemon(ctx context.Context, pokemon *pokemon.Pokemon) error {
-	query := "INSERT INTO dbo.Pokemon (DexNumber, Name, Type1, Type2) VALUES ('" + strconv.Itoa(pokemon.Id()) + "', '" + pokemon.Name() + "', '" + string(pokemon.Type()) + "', '" + string(pokemon.SecondaryType()) + "');"
+	query := "INSERT INTO dbo.Pokemon (DexNumber, Name, Type1, Type2) VALUES ('" + strconv.Itoa(pokemon.Id()) + "', '" + pokemon.Name() + "', '" + pokemon.Type().String() + "', '" + pokemon.SecondaryType().String() + "');"
 	_, err := a.database.Exec(query)
 
 	if err != nil {
 		log.Fatal("Prepare failed:", err.Error())
+		return err
 	}
 	return err
 }

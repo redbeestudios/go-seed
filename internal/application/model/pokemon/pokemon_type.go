@@ -1,69 +1,117 @@
 package pokemon
 
-import "fmt"
-
-type Type string
+type Type int
 
 const (
-	Fire     Type = "fire"
-	Grass    Type = "grass"
-	Water    Type = "water"
-	Normal   Type = "normal"
-	Flying   Type = "flying"
-	Fighting Type = "fighting"
-	Poison   Type = "poison"
-	Electric Type = "electric"
-	Ground   Type = "ground"
-	Rock     Type = "rock"
-	Psychic  Type = "psychic"
-	Ice      Type = "ice"
-	Bug      Type = "bug"
-	Ghost    Type = "ghost"
-	Steel    Type = "steel"
-	Dragon   Type = "dragon"
-	Dark     Type = "dark"
-	Fairy    Type = "fairy"
-	Invalid  Type = ""
+	Fire Type = iota + 1
+	Grass
+	Water
+	Normal
+	Flying
+	Fighting
+	Poison
+	Electric
+	Ground
+	Rock
+	Psychic
+	Ice
+	Bug
+	Ghost
+	Steel
+	Dragon
+	Dark
+	Fairy
+	Invalid
 )
 
-var allowedTypes = map[string]Type{
-	Fire.String():     Fire,
-	Grass.String():    Grass,
-	Water.String():    Water,
-	Normal.String():   Normal,
-	Flying.String():   Flying,
-	Fighting.String(): Fighting,
-	Poison.String():   Poison,
-	Electric.String(): Electric,
-	Ground.String():   Ground,
-	Rock.String():     Rock,
-	Psychic.String():  Psychic,
-	Ice.String():      Ice,
-	Bug.String():      Bug,
-	Ghost.String():    Ghost,
-	Steel.String():    Steel,
-	Dragon.String():   Dragon,
-	Dark.String():     Dark,
-	Fairy.String():    Fairy,
-	Invalid.String():  Invalid,
-}
-
-func NewPokemonType(pokemonType string) (*Type, error) {
-	if t, ok := allowedTypes[pokemonType]; ok {
-		return &t, nil
+func NewPokemonType(pokemonType string) Type {
+	switch pokemonType {
+	case "fire":
+		return Fire
+	case "water":
+		return Water
+	case "grass":
+		return Grass
+	case "normal":
+		return Normal
+	case "flying":
+		return Flying
+	case "fighting":
+		return Fighting
+	case "poison":
+		return Poison
+	case "electric":
+		return Electric
+	case "ground":
+		return Ground
+	case "rock":
+		return Rock
+	case "psychic":
+		return Psychic
+	case "ice":
+		return Ice
+	case "bug":
+		return Bug
+	case "ghost":
+		return Ghost
+	case "steel":
+		return Steel
+	case "dragon":
+		return Dragon
+	case "dark":
+		return Dark
+	case "fairy":
+		return Fairy
+	default:
+		return Invalid
 	}
-	return nil, fmt.Errorf("Invalid pokemon type: %s", pokemonType)
 }
 
 func (t Type) String() string {
-	return string(t)
+	switch t {
+	case Fire:
+		return "fire"
+	case Water:
+		return "water"
+	case Grass:
+		return "grass"
+	case Normal:
+		return "normal"
+	case Flying:
+		return "flying"
+	case Fighting:
+		return "fighting"
+	case Poison:
+		return "poison"
+	case Electric:
+		return "electric"
+	case Ground:
+		return "ground"
+	case Rock:
+		return "rock"
+	case Psychic:
+		return "psychic"
+	case Ice:
+		return "ice"
+	case Bug:
+		return "bug"
+	case Ghost:
+		return "ghost"
+	case Steel:
+		return "steel"
+	case Dragon:
+		return "dragon"
+	case Dark:
+		return "dark"
+	case Fairy:
+		return "fairy"
+	default:
+		return ""
+	}
 }
 
 // Testing purpose functions/methods
 func MustBuildPokemonType(pokemonType string) Type {
-	p, err := NewPokemonType(pokemonType)
-	if err != nil {
-		panic(err)
-	}
-	return *p
+	p := NewPokemonType(pokemonType)
+	return p
 }

@@ -19,6 +19,7 @@ func (p *pokemonDTO) ToDomain() (*pokemon.Pokemon, error) {
 		p.Name,
 		"water",
 		"fire",
+		"",
 	), nil
 }
 
